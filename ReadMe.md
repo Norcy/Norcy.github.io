@@ -15,6 +15,7 @@
 
 ## 设置 HexoBackup 为默认分支
 设置 HexoBackup 为默认分支：`git checkout HexoBackup`
+git push --set-upstream origin HexoBackup
 
 ## 安装 Hexo Git 插件
 项目文件夹（即 HexoBackup）下依次输入 npm install、npm install hexo-deployer-git --save（不需要 hexo init 这条指令）
