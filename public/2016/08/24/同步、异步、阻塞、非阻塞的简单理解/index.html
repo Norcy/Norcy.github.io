@@ -1,0 +1,740 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="同步;异步;阻塞;非阻塞" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="同步和异步, 是消息的通知机制，描述的是两个对象之间的关系  阻塞和非阻塞, 是程序在等待消息(无所谓同步或者异步)时的状态，描述的是单个对象的状态  同步同步，就是调用一个函数时，在没有得到结果之前，该函数就不返回 异步异步，就是就是调用一个函数时，该函数直接返回，等到有结果后，再通过状态、通知或回调函数告诉调用者 ">
+<meta name="keywords" content="同步;异步;阻塞;非阻塞">
+<meta property="og:type" content="article">
+<meta property="og:title" content="同步、异步、阻塞、非阻塞的简单理解">
+<meta property="og:url" content="http://yoursite.com/2016/08/24/同步、异步、阻塞、非阻塞的简单理解/index.html">
+<meta property="og:site_name" content="Norcy">
+<meta property="og:description" content="同步和异步, 是消息的通知机制，描述的是两个对象之间的关系  阻塞和非阻塞, 是程序在等待消息(无所谓同步或者异步)时的状态，描述的是单个对象的状态  同步同步，就是调用一个函数时，在没有得到结果之前，该函数就不返回 异步异步，就是就是调用一个函数时，该函数直接返回，等到有结果后，再通过状态、通知或回调函数告诉调用者 阻塞阻塞是指调用结果返回之前，当前线程会被挂起。函数只有在得到结果之后线程才继">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-21T17:58:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="同步、异步、阻塞、非阻塞的简单理解">
+<meta name="twitter:description" content="同步和异步, 是消息的通知机制，描述的是两个对象之间的关系  阻塞和非阻塞, 是程序在等待消息(无所谓同步或者异步)时的状态，描述的是单个对象的状态  同步同步，就是调用一个函数时，在没有得到结果之前，该函数就不返回 异步异步，就是就是调用一个函数时，该函数直接返回，等到有结果后，再通过状态、通知或回调函数告诉调用者 阻塞阻塞是指调用结果返回之前，当前线程会被挂起。函数只有在得到结果之后线程才继">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 同步、异步、阻塞、非阻塞的简单理解 | Norcy </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?254282e11dbc3b9d82a87c07d3c21e0d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Norcy</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">等下一个天亮...</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            ME
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                同步、异步、阻塞、非阻塞的简单理解
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-24T00:00:00+08:00" content="2016-08-24">
+              2016-08-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Others/" itemprop="url" rel="index">
+                    <span itemprop="name">Others</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/24/同步、异步、阻塞、非阻塞的简单理解/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/24/同步、异步、阻塞、非阻塞的简单理解/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<pre><code>同步和异步, 是消息的通知机制，描述的是两个对象之间的关系
+
+阻塞和非阻塞, 是程序在等待消息(无所谓同步或者异步)时的状态，描述的是单个对象的状态
+</code></pre></blockquote>
+<h1 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h1><p>同步，就是调用一个函数时，在没有得到结果之前，该函数就不返回</p>
+<h1 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h1><p>异步，就是就是调用一个函数时，该函数直接返回，等到有结果后，再通过<code>状态</code>、<code>通知</code>或<code>回调函数</code>告诉调用者</p>
+<h1 id="阻塞"><a href="#阻塞" class="headerlink" title="阻塞"></a>阻塞</h1><p>阻塞是指调用结果返回之前，当前线程会被挂起。函数只有在得到结果之后线程才继续工作</p>
+<h1 id="非阻塞"><a href="#非阻塞" class="headerlink" title="非阻塞"></a>非阻塞</h1><p>非阻塞指调用结果返回之前，该函数不会阻塞当前线程</p>
+<h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><p>你打电话问书店老板有没有《分布式系统》这本书，如果是同步通信机制，书店老板会说，你稍等，”我查一下”，然后开始查啊查，等查好了（可能是5秒，也可能是一天）告诉你结果（返回结果）</p>
+<p>而异步通信机制，书店老板直接告诉你我查一下啊，查好了打电话给你，然后直接挂电话了（不返回结果）。然后查好了，他会主动打电话给你。在这里老板通过“回电”这种方式来回调</p>
+<p>你打电话问书店老板有没有《分布式系统》这本书，你如果是阻塞式调用，你会一直把自己“挂起”，直到得到这本书有没有的结果，如果是非阻塞式调用，你不管老板有没有告诉你，你自己先做其他事，比如看电视</p>
+<h1 id="同步阻塞"><a href="#同步阻塞" class="headerlink" title="同步阻塞"></a>同步阻塞</h1><p>同步阻塞是指你不挂电话，你无法做其他事</p>
+<p>效率最低</p>
+<p>“你”可以理解为一个程序，而打电话和做其他事分别是2个操作，打电话的操作没有返回，整个程序还被挂起</p>
+<h1 id="同步非阻塞"><a href="#同步非阻塞" class="headerlink" title="同步非阻塞"></a>同步非阻塞</h1><p>同步非阻塞是指你不挂电话，你可以做其他事</p>
+<p>效率低下，你需要边做其他事，边观察老板有没有告诉你结果</p>
+<p>虽然打电话的操作没有返回，但是程序可以先执行其他操作（不是执行打电话之后的操作，而是跟打电话行为平行的操作），程序需要在2个函数之间频繁切换</p>
+<h1 id="异步阻塞"><a href="#异步阻塞" class="headerlink" title="异步阻塞"></a>异步阻塞</h1><p>异步阻塞是指你挂了电话，但你无法做其他事，等老板打电话过来</p>
+<p>效率低下</p>
+<p>虽然挂了电话，但是程序无法执行其他操作。程序不是被调用函数阻塞，而是被等待函数结果阻塞</p>
+<h1 id="异步非阻塞"><a href="#异步非阻塞" class="headerlink" title="异步非阻塞"></a>异步非阻塞</h1><p>异步非阻塞是指你挂了电话，你可以做其他事，等老板打电话过来</p>
+<p>效率最高</p>
+<p>程序没有在两种不同的操作中来回切换</p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><ol>
+<li><a href="http://blog.chinaunix.net/uid-26000296-id-3754118.html" target="_blank" rel="noopener">IO中同步、异步与阻塞、非阻塞的区别</a></li>
+<li><a href="http://www.linuxidc.com/Linux/2015-07/120338.htm" target="_blank" rel="noopener">怎样理解阻塞非阻塞与同步异步的区别？</a></li>
+<li><a href="http://m.blog.csdn.net/article/details?id=5778378" target="_blank" rel="noopener">IO - 同步，异步，阻塞，非阻塞 （亡羊补牢篇）</a></li>
+</ol>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/25/Objective-C中的消息转发机制/" rel="next" title="Objective-C中的消息转发机制">
+                <i class="fa fa-chevron-left"></i> Objective-C中的消息转发机制
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/04/如何用iPad在床上优雅的看大片/" rel="prev" title="如何用iPad在床上优雅的看大片">
+                如何用iPad在床上优雅的看大片 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/24/同步、异步、阻塞、非阻塞的简单理解/"
+           data-title="同步、异步、阻塞、非阻塞的简单理解" data-url="http://yoursite.com/2016/08/24/同步、异步、阻塞、非阻塞的简单理解/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            博客概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://p3.music.126.net/JBP9iipdDGfVgImBMMmfKw==/3264450032066237.jpg"
+               alt="Norcy" />
+          <p class="site-author-name" itemprop="name">Norcy</p>
+          <p class="site-description motion-element" itemprop="description">iOS 修煉ing</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+          
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#同步"><span class="nav-number">1.</span> <span class="nav-text">同步</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#异步"><span class="nav-number">2.</span> <span class="nav-text">异步</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#阻塞"><span class="nav-number">3.</span> <span class="nav-text">阻塞</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#非阻塞"><span class="nav-number">4.</span> <span class="nav-text">非阻塞</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#例子"><span class="nav-number">5.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#同步阻塞"><span class="nav-number">6.</span> <span class="nav-text">同步阻塞</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#同步非阻塞"><span class="nav-number">7.</span> <span class="nav-text">同步非阻塞</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#异步阻塞"><span class="nav-number">8.</span> <span class="nav-text">异步阻塞</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#异步非阻塞"><span class="nav-number">9.</span> <span class="nav-text">异步非阻塞</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文章"><span class="nav-number">10.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Norcy</span>
+</div>
+
+<div class="powered-by">
+  感谢 <a class="theme-link" href="http://hexo.io">Hexo</a> 提供主题
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=0.5.0"></script>
+
+
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"norcy"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>
