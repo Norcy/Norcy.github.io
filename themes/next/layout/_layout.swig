@@ -68,7 +68,8 @@
   {% include '_scripts/third-party/lean-analytics.swig' %}
 
   {% if theme.canvas_nest %}
-    <script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  	<!-- 可选配置：color="0,255,255" opacity="0.7" count=99 zIndex="0"-->
+    <script type="text/javascript" color="144,215,236" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
   {% endif %}
   
 </body>
