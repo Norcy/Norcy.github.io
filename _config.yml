@@ -80,3 +80,10 @@ avatar: http://p3.music.126.net/JBP9iipdDGfVgImBMMmfKw==/3264450032066237.jpg
 baidu_analytics: 254282e11dbc3b9d82a87c07d3c21e0d
 #多说评论 by Norcy
 duoshuo_shortname: norcy
+
+#本地搜索
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
