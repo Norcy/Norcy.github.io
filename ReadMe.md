@@ -18,7 +18,7 @@ Google 出来的，比较优雅
 
 进入该文件夹：`cd HexoBackup`
 
-拉取仓库：`git clone https://github.com/Norcy/HexoBackup.git`
+拉取仓库：`git clone https://github.com/Norcy/Norcy.github.io.git`
 
 ### 设置 HexoBackup 为默认分支
 设置 HexoBackup 为默认分支：`git checkout HexoBackup`
