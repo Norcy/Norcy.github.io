@@ -136,6 +136,7 @@ photos: images/girl.jpg\n---\n\n";
     #os.system("pwd");
     #shellFileName = os.path.join(sys.path[0], "Travis.sh");
     #print("Shell Name is "+shellFileName);
+    os.system("sudo -Hu ubuntu");
     os.system("/usr/bin/git pull");
     os.system("/usr/bin/git add .");
     os.system("/usr/bin/git commit -m 'Update From PublicAccount'");
