@@ -41,11 +41,11 @@ class BlogItem(object):
 		ret = self.year+" "+self.mouth+" "+self.date+" "+self.type+" "+self.name+"\n";
 		return ret;
 
-def addBlogItem(name, type=""):
+def addBlogItem(name, type="", year="", mouth="", date=""):
 	readFileName = os.path.join(sys.path[0], "ReadList.txt");
 	tmpFileName = os.path.join(sys.path[0], "ReadList_tmp.txt");
 
-	blogItem = BlogItem("", "", "", type, name, "");
+	blogItem = BlogItem(year, mouth, date, type, name, "");
 	allItems = list();
 	readFile = open(readFileName, 'r', encoding="utf-8");
 	for line in readFile:
@@ -71,7 +71,7 @@ def addBlogItem(name, type=""):
 	saveMarkdown();
 
 def saveMarkdown():
-	sourceFileName = os.path.join(sys.path[0], "ReadList.txt");
+	sourceFileName = os.path.join(sys.path[0], "ReadList.txt");	
 	sourceFile = open(sourceFileName, 'r', encoding="utf-8");
 	destFilename = os.path.join(sys.path[0], 'source', '_posts', "那些年，我看过的.md");
 	# print(destFilename);
@@ -132,12 +132,27 @@ photos: images/girl.jpg\n---\n\n";
 	destFile.close();
 
 def main():
-	if len(sys.argv) >= 3:
-		addBlogItem(sys.argv[1], sys.argv[2]);
-	elif len(sys.argv) >= 2:
-		addBlogItem(sys.argv[1]);
-	else:
+	if len(sys.argv) <= 1:
 		saveMarkdown();
+	else:
+		year="";
+		mouth="";
+		date="";
+		type="";
+		name="";
+
+		if len(sys.argv) >= 6:
+			date = sys.argv[5];
+		if len(sys.argv) >= 5:
+			mouth = sys.argv[4];
+		if len(sys.argv) >= 4:
+			year = sys.argv[3];
+		if len(sys.argv) >= 3:
+			type = sys.argv[2];
+		if len(sys.argv) >= 2:
+			name = sys.argv[1];
+
+		addBlogItem(name, type, year, mouth, date);
 	
   
 if __name__=="__main__":
