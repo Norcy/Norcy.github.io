@@ -1,4 +1,5 @@
 import sys;
+import os;
 
 class BlogItem(object):
     def __init__(self, year, mouth, date, type, name, url):
@@ -20,7 +21,9 @@ class BlogItem(object):
 
 def saveMarkdown():
 	sourceFile = open("ReadList.txt", 'r', encoding="utf-8");
-	destFile=open('/source/_post/那些年，我看过的.md','w+');
+	destFilename = os.path.join(os.getcwd(), 'source', '_posts', "那些年，我看过的.md");
+	print(destFilename);
+	destFile=open(destFilename,'w+');
 
 	githubTitle = "---\ntitle: 那些年，我看过的\ndate: 2013-3-1\n\
 description: 我的书籍/电影/电视剧/动漫列表\ncategories:\n- 代码之外 \n\
