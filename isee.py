@@ -137,10 +137,10 @@ photos: images/girl.jpg\n---\n\n";
     #shellFileName = os.path.join(sys.path[0], "Travis.sh");
     #print("Shell Name is "+shellFileName);
     os.system("sudo -Hu ubuntu");
-    os.system("/usr/bin/git pull");
-    os.system("/usr/bin/git add .");
-    os.system("/usr/bin/git commit -m 'Update From PublicAccount'");
-    os.system("/usr/bin/git push");    
+    os.system("sudo -Hu ubuntu usr/bin/git pull");
+    os.system("sudo -Hu ubuntu /usr/bin/git add .");
+    os.system("sudo -Hu ubuntu /usr/bin/git commit -m 'Update From PublicAccount'");
+    os.system("sudo -Hu ubuntu /usr/bin/git push");    
 
 
 def main():
