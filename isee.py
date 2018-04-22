@@ -2,6 +2,7 @@ import sys;
 import os;
 import time;
 import shutil;
+import stat;
 
 class BlogItem(object):
 	def __init__(self, year, mouth, date, type, name, url):
@@ -59,6 +60,7 @@ def addBlogItem(name, type="", year="", mouth="", date=""):
 	allItems.sort(reverse=True);
 
 	writeFile = open(tmpFileName, 'w', encoding="utf-8");
+	os.chmod(tmpFileName, stat.S_IRWXU|stat.S_IRWXG|stat.S_IRWXO);
 	for item in allItems:
 		writeFile.write(item);
 
