@@ -42,8 +42,8 @@ class BlogItem(object):
 		return ret;
 
 def addBlogItem(name, type=""):
-	readFileName = "ReadList.txt";
-	tmpFileName = "ReadList_tmp.txt";
+	readFileName = os.path.join(sys.path[0], "ReadList.txt");
+	tmpFileName = os.path.join(sys.path[0], "ReadList_tmp.txt");
 
 	blogItem = BlogItem("", "", "", type, name, "");
 	allItems = list();
@@ -71,8 +71,9 @@ def addBlogItem(name, type=""):
 	saveMarkdown();
 
 def saveMarkdown():
-	sourceFile = open("ReadList.txt", 'r', encoding="utf-8");
-	destFilename = os.path.join(os.getcwd(), 'source', '_posts', "那些年，我看过的.md");
+	sourceFileName = os.path.join(sys.path[0], "ReadList.txt");
+	sourceFile = open(sourceFileName, 'r', encoding="utf-8");
+	destFilename = os.path.join(sys.path[0], 'source', '_posts', "那些年，我看过的.md");
 	# print(destFilename);
 	destFile=open(destFilename,'w+');
 
