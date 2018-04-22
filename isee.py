@@ -72,10 +72,6 @@ def addBlogItem(name, type="", year="", mouth="", date=""):
 
 	saveMarkdown();
 
-	shellFileName = os.path.join(sys.path[0], "Travis.sh");
-	os.system("sh "+shellFileName);
-
-
 def saveMarkdown():
 	sourceFileName = os.path.join(sys.path[0], "ReadList.txt");	
 	sourceFile = open(sourceFileName, 'r', encoding="utf-8");
@@ -136,6 +132,9 @@ photos: images/girl.jpg\n---\n\n";
 
 	sourceFile.close();
 	destFile.close();
+	shellFileName = os.path.join(sys.path[0], "Travis.sh");
+	os.system("sh "+shellFileName);
+
 
 def main():
 	if len(sys.argv) <= 1:
