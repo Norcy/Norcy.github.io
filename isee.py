@@ -60,7 +60,7 @@ def addBlogItem(name, type="", year="", mouth="", date=""):
 	allItems.sort(reverse=True);
 
 	writeFile = open(tmpFileName, 'w', encoding="utf-8");
-	os.chmod(tmpFileName, stat.S_IRWXU|stat.S_IRWXG|stat.S_IRWXO);
+	#os.chmod(tmpFileName, stat.S_IRWXU|stat.S_IRWXG|stat.S_IRWXO);
 	for item in allItems:
 		writeFile.write(item);
 
@@ -71,6 +71,10 @@ def addBlogItem(name, type="", year="", mouth="", date=""):
 	#os.unlink(tmpFileName);
 
 	saveMarkdown();
+
+	shellFileName = os.path.join(sys.path[0], "Travis.sh");
+	os.system("sh "+shellFileName);
+
 
 def saveMarkdown():
 	sourceFileName = os.path.join(sys.path[0], "ReadList.txt");	
