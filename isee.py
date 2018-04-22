@@ -75,7 +75,7 @@ def addBlogItem(name, type="", year="", mouth="", date=""):
 def saveMarkdown():
     sourceFileName = os.path.join(sys.path[0], "ReadList.txt");    
     sourceFile = open(sourceFileName, 'r', encoding="utf-8");
-    destFilename = os.path.join(sys.path[0], 'source', '_posts', "Soso.md");
+    destFilename = os.path.join(sys.path[0], 'source', '_posts', "那些年，我看过的.md");
     # print(destFilename);
     destFile = open(destFilename, 'w', encoding="utf-8");
 
