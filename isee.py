@@ -132,7 +132,7 @@ photos: images/girl.jpg\n---\n\n";
 
     sourceFile.close();
     destFile.close();
-    #os.chdir(sys.path[0]);
+    os.chdir(sys.path[0]);
     os.system("/usr/bin/git pull origin HexoBackup");
     os.system("/usr/bin/git add .");
     os.system("/usr/bin/git commit -m 'Update From PublicAccount'");
