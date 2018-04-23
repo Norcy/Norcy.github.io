@@ -143,6 +143,7 @@ photos: images/girl.jpg\n---\n\n";
 
 
 def main():
+    os.system("whoami");
     if len(sys.argv) <= 1:
         saveMarkdown();
     else:
