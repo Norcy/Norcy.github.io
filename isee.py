@@ -68,7 +68,7 @@ def addBlogItem(name, type="", year="", mouth="", date=""):
     writeFile.close();
     readFile.close();
 
-    shutil.copyfile(tmpFileName, readFileName);
+    #shutil.copyfile(tmpFileName, readFileName);
     #os.unlink(tmpFileName);
     saveMarkdown();
 
