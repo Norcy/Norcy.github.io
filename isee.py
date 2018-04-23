@@ -68,7 +68,7 @@ def addBlogItem(name, type="", year="", mouth="", date=""):
     writeFile.close();
     readFile.close();
 
-    #shutil.copyfile(tmpFileName, readFileName);
+    shutil.copyfile(tmpFileName, readFileName);
     #os.unlink(tmpFileName);
     saveMarkdown();
 
@@ -132,10 +132,7 @@ photos: images/girl.jpg\n---\n\n";
 
     sourceFile.close();
     destFile.close();
-    os.chdir(sys.path[0]);
-    #os.system("pwd");
-    #shellFileName = os.path.join(sys.path[0], "Travis.sh");
-    #print("Shell Name is "+shellFileName);
+    #os.chdir(sys.path[0]);
     os.system("/usr/bin/git pull");
     os.system("/usr/bin/git add .");
     os.system("/usr/bin/git commit -m 'Update From PublicAccount'");
@@ -143,7 +140,7 @@ photos: images/girl.jpg\n---\n\n";
 
 
 def main():
-    os.system("whoami");
+    #os.system("whoami");
     if len(sys.argv) <= 1:
         saveMarkdown();
     else:
