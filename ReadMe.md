@@ -37,3 +37,11 @@ Google 出来的，比较优雅
 
 参考：http://www.jianshu.com/p/5e74046e7a0f
 
+
+
+# 以元数据管理看过的电影、书籍
+1. 修改 ReadList.txt
+2. b 代表书籍，m 代表电影，s 代表连续剧
+3. 运行 python3 isee.py 来自动生成 markdown 文章，同时可以部署到 Github
+
+
