@@ -17,7 +17,7 @@ after_script:
   - git config user.email "chenyg32@gmail.com"  #修改email
   - git add .
   - git commit -m "Travis Auto Update"
-  - git push --force --quiet "https://${Hexo}@${GH_REF}" master:master  #GH_TOKEN是在Travis中配置token的名称
+  - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:master  #GH_TOKEN是在Travis中配置token的名称
 
 branches:
   only:
