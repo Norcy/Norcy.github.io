@@ -1,4 +1,4 @@
 git pull
 git add .
-git commit -m "Travis Auto Update"
+git commit -m "Update By Shell"
 git push
