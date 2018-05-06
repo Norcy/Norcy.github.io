@@ -43,7 +43,7 @@ class BlogItem(object):
         ret = self.year+" "+self.mouth+" "+self.date+" "+self.type+" "+self.name+"\n";
         return ret;
 
-def addBlogItem(name, type="", year="", mouth="", date=""):
+def updateBlogItem(cmdType, name, type="", year="", mouth="", date=""):
     readFileName = os.path.join(sys.path[0], "ReadList.txt");
     tmpFileName = os.path.join(sys.path[0], "ReadList_tmp.txt");
 
@@ -54,9 +54,18 @@ def addBlogItem(name, type="", year="", mouth="", date=""):
         line = line.strip();
         if len(line) == 0:
             continue;
+        words = line.split(" ", 4);
+        curType = words[3].strip();
+        curName = words[4].strip();
+        if cmdType == "del":
+            if curType == type && curName == name:
+                continue;
+
         allItems.append(line+"\n");
 
-    allItems.append(blogItem.txtInfo());
+    if cmdType != "del":
+        allItems.append(blogItem.txtInfo());
+
     allItems = list(set(allItems));
     allItems.sort(reverse=True);
 
@@ -141,27 +150,31 @@ description: 我的书籍/电影/电视剧/动漫列表\ncategories:\n- 代码�
 
 def main():
     #os.system("whoami");
-    if len(sys.argv) <= 1:
+    if len(sys.argv) <= 2:
         saveMarkdown();
     else:
+        cmdType="";
         year="";
         mouth="";
         date="";
         type="";
         name="";
 
+        if len(sys.argv) >= 7:
+            date = sys.argv[6];
         if len(sys.argv) >= 6:
-            date = sys.argv[5];
+            mouth = sys.argv[5];
         if len(sys.argv) >= 5:
-            mouth = sys.argv[4];
+            year = sys.argv[4];
         if len(sys.argv) >= 4:
-            year = sys.argv[3];
+            type = sys.argv[3];
         if len(sys.argv) >= 3:
-            type = sys.argv[2];
+            name = sys.argv[2];
         if len(sys.argv) >= 2:
-            name = sys.argv[1];
+            cmdType = sys.argv[1];
 
-        addBlogItem(name, type, year, mouth, date);
+        
+        updateBlogItem(cmdType, name, type, year, mouth, date);
     
   
 if __name__=="__main__":
