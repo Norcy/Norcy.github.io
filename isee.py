@@ -58,7 +58,7 @@ def updateBlogItem(cmdType, name, type="", year="", mouth="", date=""):
         curType = words[3].strip();
         curName = words[4].strip();
         if cmdType == "del":
-            if curType == type && curName == name:
+            if curType == type and curName == name:
                 continue;
 
         allItems.append(line+"\n");
