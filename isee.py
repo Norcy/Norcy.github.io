@@ -81,7 +81,7 @@ def saveMarkdown():
 
     githubTitle = "---\ntitle: 那些年，我看过的\ndate: 2013-3-1\n\
 description: 我的书籍/电影/电视剧/动漫列表\ncategories:\n- 代码之外 \n\
-photos: images/girl.jpg\n---\n\n";
+---\n\n";
     destFile.write(githubTitle);
 
     blogItems = [];
