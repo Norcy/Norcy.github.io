@@ -44,6 +44,9 @@ class BlogItem(object):
         return ret;
 
 def updateBlogItem(cmdType, name, type="", year="", mouth="", date=""):
+    os.chdir(sys.path[0]);
+    os.system("/usr/bin/git pull origin HexoBackup");
+    
     readFileName = os.path.join(sys.path[0], "ReadList.txt");
     tmpFileName = os.path.join(sys.path[0], "ReadList_tmp.txt");
 
@@ -140,8 +143,6 @@ description: 我的书籍/电影/电视剧/动漫列表\ncategories:\n- 代码�
 
     sourceFile.close();
     destFile.close();
-    os.chdir(sys.path[0]);
-    os.system("/usr/bin/git pull origin HexoBackup");
     os.system("/usr/bin/git add .");
     os.system("/usr/bin/git commit -m 'Update From PublicAccount'");
     os.system("/usr/bin/git push origin HexoBackup");    
