@@ -75,5 +75,8 @@
   <!-- 小红心 -->
   <script type="text/javascript" src="/js/src/love.js"></script>
   
+  <!--崩溃欺骗-->
+  <script type="text/javascript" src="/js/src/crash_cheat.js"></script>
+  
 </body>
 </html>
