@@ -2,7 +2,7 @@
 title: 如何用iPad在床上优雅的看大片
 date: 2016-08-04
 categories:
-- 代码之外
+- 技术改变生活
 photos: images/girl.jpg
 keywords: iPad;局域网;视频
 ---
