@@ -1,7 +1,8 @@
-commitMessage='Auto Commit'
+who=`whoami`
+commitMessage="Auto Commit [by ${who}]"
 
-if [ $# == 1 ] ; then
-	commitMessage=$1
+if [ $# -gt 0 ] ; then
+	commitMessage=$*." [by ${who}]"
 fi
 
 git pull 
