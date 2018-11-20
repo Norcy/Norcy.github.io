@@ -2,7 +2,7 @@ who=`whoami`
 commitMessage="Auto Commit [by ${who}]"
 
 if [ $# -gt 0 ] ; then
-	commitMessage=$*." [by ${who}]"
+	commitMessage=$*" [by ${who}]"
 fi
 
 git pull 
