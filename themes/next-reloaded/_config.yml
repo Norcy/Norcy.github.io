@@ -256,7 +256,7 @@ sidebar:
   b2t: false
 
   # Scroll percent label in b2t button.
-  scrollpercent: false
+  scrollpercent: true
 
   # Enable sidebar on narrow view (only for Muse | Mist).
   onmobile: false
@@ -327,7 +327,7 @@ codeblock:
 # And you can show or hide one article specially through add page variable `reward: true/false`.
 reward:
   enable: true
-  comment: Donate comment here
+  comment: 一杯冰可乐
   wechatpay: /images/wechatpay.jpg
   alipay: /images/alipay.jpg
   #bitcoin: /images/bitcoin.png
