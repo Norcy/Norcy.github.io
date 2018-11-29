@@ -255,3 +255,8 @@ version: 0.5.0
 # Online contact
 daovoice: true
 daovoice_app_id:  e979a916 # 这里填你刚才获得的 app_id
+
+# Reward
+reward_comment: 一杯冰可乐
+wechatpay: /images/wechat_pay.png
+alipay: /images/ali_pay.png
