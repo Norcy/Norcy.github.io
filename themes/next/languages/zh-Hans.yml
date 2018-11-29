@@ -40,18 +40,18 @@ footer:
 counter:
   tag_cloud:
     zero: 暂无标签
-    one: Norcy帮你数了下，一共有 1 个标签
-    other: "Norcy帮你数了下，一共有 %d 个标签"
+    one: Norcy 帮你数了下，一共有 1 个标签
+    other: "Norcy 帮你数了下，一共有 %d 个标签"
 
   categories:
     zero: 暂无分类
-    one: Norcy帮你数了下，一共有 1 个分类
-    other: "Norcy帮你数了下，一共有 %d 个分类"
+    one: Norcy 帮你数了下，一共有 1 个分类
+    other: "Norcy 帮你数了下，一共有 %d 个分类"
 
   archive_posts:
     zero: 暂无日志。
-    one: Norcy帮你数了下，一共有 1 篇日志。
-    other: "Norcy帮你数了下，一共有 %d 篇日志。"
+    one: Norcy 帮你数了下，一共有 1 篇日志。
+    other: "Norcy 帮你数了下，一共有 %d 篇日志。"
 
 state:
   posts: 文章

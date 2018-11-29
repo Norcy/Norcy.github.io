@@ -7,12 +7,12 @@ title: Norcy
 subtitle: 等下一个天亮...
 description: iOS 修煉ing
 author: Norcy
-language: zh-Hans
+language: zh-CN
 timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+url: http://norcy.github.io
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -78,5 +78,3 @@ deploy:
 avatar: https://p3.music.126.net/JBP9iipdDGfVgImBMMmfKw==/3264450032066237.jpg
 #web_analytics by Norcy
 baidu_analytics: 254282e11dbc3b9d82a87c07d3c21e0d
-#多说评论 by Norcy
-duoshuo_shortname: norcy
