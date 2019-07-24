@@ -1115,51 +1115,6 @@ NSMutableDictionary *anNSdictionary = (__bridge_transfer NSMutableDictionary *)a
 扩展阅读：[利用NSCache提升效率](https://www.ganlvji.com/nscache/)
 
 ## 第51条：精简initialize与load的实现代码
-|           | load  | initialize |
-| :--: |:--:| :-:|
-| 执行次数   | 1次 | 1次 |
-| 执行时机   | app启动时所有运行时需要用到的类 | 惰性调用，需要使用到具体类的时候才调用 |
-| 作用      | 调试 现基本不用 |初始化全局oc对象（普通对象可以在声明的时候初始化）|
-| 执行时环境 | 系统不稳定，许多东西尚未初始化 | 系统处于正常状态 |
-| 调用顺序   | 1. 先调用本类的load，再调用其分类（如果有的话）2. 本类没写 系统不会调用其父类 | 跟其它方法一样 本类没写 会自动调用父类，所以需要先判断类的类名 |
-| 相同点    | 1. 调用的时候其它类不一定准备好 2. 代码要精简，只初始化变量，不调用方法 3. 线程安全，不必加锁| 同左 |
-
-### initialize 方法的正确写法（重要！！！不然有子类的情况下可能会调用多次）
-假设我想要在 A 的 initialize 方法中打印出自己，如果这样写：
-```objc
-@interface A : NSObject
-@end
-@implementation A
-+ (void)initialize
-{
-    NSLog(@"%@", self);
-}
-@end
-
-@interface B : A
-@end
-@implementation B
-@end
-```
-此时创建一个B对象，输出是
-> A  
-> B
-
-初始化 B 的时候，要先初始化 A，所以输出 A，然后初始化 B，由于 B 没有实现 initialize，所以系统调用了 A 的方法，此时 self 是 B
-
-所以 A 的 initialize 方法应该这样写
-
-```objc
-+ (void)initialize
-{
-    if (self == [A class])
-    {
-        NSLog(@"%@", self);
-    }
-}
-```
-此时创建一个B对象，输出是
-> B
-
+参见：[iOS 的 initialize 和 load 区别](https://norcy.github.io/wiki/iOS/iOS%20%E7%9A%84%20initialize%20%E5%92%8C%20load%20%E5%8C%BA%E5%88%AB/)
 ## 第52条：别忘了NSTimer会保留其目标对象
 参见：[NSTimer 会保留目标对象](http://norcy.github.io/2016/06/20/NSTimer%20%E4%BC%9A%E4%BF%9D%E7%95%99%E7%9B%AE%E6%A0%87%E5%AF%B9%E8%B1%A1/)
