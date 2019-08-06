@@ -390,7 +390,7 @@ struct objc_class {
 ```
 
 ### 类的继承体系
-![](http://7xsd8c.com1.z0.glb.clouddn.com/isa.png)
+![](http://image.norcy.xyz/isa.png)
 
 ```objc
 NSString *str = @"Hello";

@@ -26,7 +26,7 @@ id returnValue = objc_msgSend(someObj, @selector(messageName:), params);
 
 第三阶段 完整的消息转发机制。运行期系统会把与消息有关的全部细节都封装到 NSInvocation 对象中，再给接收者最后一次机会，令其设法解决当前还未处理的消息。
 
-![](http://7xsd8c.com1.z0.glb.clouddn.com/msgSend.png)
+![](http://image.norcy.xyz/msgSend.png)
 
 ## 动态方法解析
 对象在收到无法响应的消息后，会调用其所属类的下列方法
