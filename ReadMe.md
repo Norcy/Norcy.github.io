@@ -33,15 +33,4 @@ Google 出来的，比较优雅
 ## 方法3：使用 Travis
 魁爷介绍，最优雅，终端电脑无需安装 Hexo
 
-按照方法2，拉取仓库，设置默认分支，更新博客内容后，只需要使用 `sh Travis.sh` 脚本更新即可
-
 参考：http://www.jianshu.com/p/5e74046e7a0f
-
-
-
-# 以元数据管理看过的电影、书籍
-1. 修改 ReadList.txt
-2. b 代表书籍，m 代表电影，s 代表连续剧
-3. 运行 python3 isee.py 来自动生成 markdown 文章，同时可以部署到 Github
-
-
