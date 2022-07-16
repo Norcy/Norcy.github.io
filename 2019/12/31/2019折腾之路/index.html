@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+      
+    
+    
+      
+    
+  <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+  <link href="//cdn.jsdelivr.net/npm/pace-js@1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.5.0',
+    sidebar: {"position":"right","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="模仿网易云音乐的年度代码报告（201902） 有趣的灵魂啥都想做  https://norcy.github.io/AnnualCodeReport/ Github 地址：AnnualCodeReport 微信机器人（201903） 编号：89757  实现了自动聊天的微信机器人，不过后来微信禁止小号登录网页版就比较麻烦 KM 书籍破解（201903） 技术不难，难的是你能不能想到  同事在群里推">
+<meta name="keywords" content="折腾">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2019折腾之路">
+<meta property="og:url" content="http://norcy.github.io/2019/12/31/2019折腾之路/index.html">
+<meta property="og:site_name" content="Norcy">
+<meta property="og:description" content="模仿网易云音乐的年度代码报告（201902） 有趣的灵魂啥都想做  https://norcy.github.io/AnnualCodeReport/ Github 地址：AnnualCodeReport 微信机器人（201903） 编号：89757  实现了自动聊天的微信机器人，不过后来微信禁止小号登录网页版就比较麻烦 KM 书籍破解（201903） 技术不难，难的是你能不能想到  同事在群里推">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://media.ifanrusercontent.com/user_files/trochili/05/ac/05ac3ecb572700d3b298eed8e7b889505fc07f3b-f31c5aeb2d92bbbc20973dd1c92c1bf45a086a46.jpg">
+<meta property="og:updated_time" content="2022-07-16T09:05:58.481Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2019折腾之路">
+<meta name="twitter:description" content="模仿网易云音乐的年度代码报告（201902） 有趣的灵魂啥都想做  https://norcy.github.io/AnnualCodeReport/ Github 地址：AnnualCodeReport 微信机器人（201903） 编号：89757  实现了自动聊天的微信机器人，不过后来微信禁止小号登录网页版就比较麻烦 KM 书籍破解（201903） 技术不难，难的是你能不能想到  同事在群里推">
+<meta name="twitter:image" content="https://media.ifanrusercontent.com/user_files/trochili/05/ac/05ac3ecb572700d3b298eed8e7b889505fc07f3b-f31c5aeb2d92bbbc20973dd1c92c1bf45a086a46.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://norcy.github.io/2019/12/31/2019折腾之路/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>2019折腾之路 | Norcy</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?254282e11dbc3b9d82a87c07d3c21e0d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+
+    <a href="https://github.com/norcy" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Norcy</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">等下一个天亮...</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://norcy.github.io/2019/12/31/2019折腾之路/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Norcy">
+      <meta itemprop="description" content="iOS 修煉ing">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Norcy">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">2019折腾之路
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-12-31 00:00:00" itemprop="dateCreated datePublished" datetime="2019-12-31T00:00:00+00:00">2019-12-31</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2022-07-16 09:05:58" itemprop="dateModified" datetime="2022-07-16T09:05:58+00:00">2022-07-16</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/技术改变生活/" itemprop="url" rel="index"><span itemprop="name">技术改变生活</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/31/2019折腾之路/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/12/31/2019折腾之路/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="模仿网易云音乐的年度代码报告（201902）"><a href="#模仿网易云音乐的年度代码报告（201902）" class="headerlink" title="模仿网易云音乐的年度代码报告（201902）"></a>模仿网易云音乐的年度代码报告（201902）</h2><blockquote>
+<p>有趣的灵魂啥都想做</p>
+</blockquote>
+<p><a href="https://norcy.github.io/AnnualCodeReport/">https://norcy.github.io/AnnualCodeReport/</a></p>
+<p><a href="https://github.com/Norcy/AnnualCodeReport" target="_blank" rel="noopener">Github 地址：AnnualCodeReport</a></p>
+<h2 id="微信机器人（201903）"><a href="#微信机器人（201903）" class="headerlink" title="微信机器人（201903）"></a>微信机器人（201903）</h2><blockquote>
+<p>编号：89757</p>
+</blockquote>
+<p>实现了自动聊天的微信机器人，不过后来微信禁止小号登录网页版就比较麻烦</p>
+<h2 id="KM-书籍破解（201903）"><a href="#KM-书籍破解（201903）" class="headerlink" title="KM 书籍破解（201903）"></a>KM 书籍破解（201903）</h2><blockquote>
+<p>技术不难，难的是你能不能想到</p>
+</blockquote>
+<p>同事在群里推荐内网 KM 上书籍时抱怨无法下载。我遂分析了其网页结构，发现虽然没有提供下载链接，但是每一页的图片链接却是可以抓取到的，并且有规律可循</p>
+<p>直接写了个简单的脚本，把书籍的每一页图片抓取下来；为了提供优质的服务体验，我下载后专门生成一个 markdown，markdown 中的每一行都是一个图片的本地链接，然后利用其转 pdf，这样一本 pdf 格式的书籍就获取到了，丢到群里，赞不绝口</p>
+<p><a href="">Github 地址：Download_KM_Book</a></p>
+<h2 id="iOS-检测循环引用脚本（201905）"><a href="#iOS-检测循环引用脚本（201905）" class="headerlink" title="iOS 检测循环引用脚本（201905）"></a>iOS 检测循环引用脚本（201905）</h2><blockquote>
+<p>君子性非异也，善假于物也</p>
+</blockquote>
+<p>线上发现一处循环引用，秉着“相同的错误不要犯两次”的原则，故开发一个脚本扫描整个大工程</p>
+<p>可以检测同时包含 self 和 weakSelf 的 block</p>
+<p><a href="https://github.com/Norcy/RecycleReferenceDetection" target="_blank" rel="noopener">Github 地址：RecycleReferenceDetection</a></p>
+<h2 id="小频率（201906）"><a href="#小频率（201906）" class="headerlink" title="小频率（201906）"></a>小频率（201906）</h2><blockquote>
+<p>人生第一款小程序</p>
+</blockquote>
+<p>写代码很简单，设计 UI、交互、推广、运营、后台这些，可真难，隔行如隔山</p>
+<p>未知频率，等你遇见</p>
+<p>每一个早起的清晨都可以打开小频率，开启一天好时光</p>
+<p>每一个无眠的夜晚都可以打开小频率，静静地伴你入眠</p>
+<p>每一个歌荒的时间都可以打开小频率，发现更多好歌曲</p>
+<p><img src="https://media.ifanrusercontent.com/user_files/trochili/05/ac/05ac3ecb572700d3b298eed8e7b889505fc07f3b-f31c5aeb2d92bbbc20973dd1c92c1bf45a086a46.jpg" alt=""></p>
+<h2 id="微信付费表情破解（201908）"><a href="#微信付费表情破解（201908）" class="headerlink" title="微信付费表情破解（201908）"></a>微信付费表情破解（201908）</h2><blockquote>
+<p>献给那些收到付费表情的人们</p>
+</blockquote>
+<p>Before:</p>
+<ol>
+<li>将自己、小号和企业微信的自己拉到一个群里</li>
+<li>长按别人发的付费表情，然后逐条转发到该群</li>
+<li>企业微信转发，长按该表情转发到该群</li>
+<li>回到微信，就可以拿到该表情的破解版</li>
+</ol>
+<p>After:</p>
+<p>后来微信估计发现了这个漏洞，会进行二进制比对。所以现在转到电脑上的企业微信之后，需要把表情的文件提取出来，然后在不影响表情的情况下修改二进制数据，以绕过微信的检测</p>
+<p>知识点：</p>
+<ul>
+<li>PNG/GIF 图片的二进制格式</li>
+<li>如何修改二进制数据，而不影响表情（即找到冗余字段）</li>
+</ul>
+<h2 id="盘古之白（201908）"><a href="#盘古之白（201908）" class="headerlink" title="盘古之白（201908）"></a>盘古之白（201908）</h2><blockquote>
+<p>一鍵在中英文之間添加空格</p>
+</blockquote>
+<p>平日寫代碼或寫文章需要手動在中英文之間添加空格，非常繁瑣，故使用 Alfred 的 workflow 來實現壹鍵格式化</p>
+<p><a href="https://github.com/Norcy/alfred-workflow-pangu" target="_blank" rel="noopener">Github 地址：alfred-workflow-pangu</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>一杯冰可乐</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Norcy 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Norcy 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/31/2018折腾之路/" rel="next" title="2018折腾之路">
+                <i class="fa fa-chevron-left"></i> 2018折腾之路
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/07/《为什么精英都是时间控》/" rel="prev" title="《为什么精英都是时间控》">
+                《为什么精英都是时间控》 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Norcy</p>
+              <p class="site-description motion-element" itemprop="description">iOS 修煉ing</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#模仿网易云音乐的年度代码报告（201902）"><span class="nav-number">1.</span> <span class="nav-text">模仿网易云音乐的年度代码报告（201902）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微信机器人（201903）"><span class="nav-number">2.</span> <span class="nav-text">微信机器人（201903）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KM-书籍破解（201903）"><span class="nav-number">3.</span> <span class="nav-text">KM 书籍破解（201903）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iOS-检测循环引用脚本（201905）"><span class="nav-number">4.</span> <span class="nav-text">iOS 检测循环引用脚本（201905）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小频率（201906）"><span class="nav-number">5.</span> <span class="nav-text">小频率（201906）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微信付费表情破解（201908）"><span class="nav-number">6.</span> <span class="nav-text">微信付费表情破解（201908）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#盘古之白（201908）"><span class="nav-number">7.</span> <span class="nav-text">盘古之白（201908）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Norcy</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.5.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+    
+      
+  
+  <script type="text/javascript" color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.5.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'HXXclkVSXXj49dV3NfLuq2cW-gzGzoHsz',
+        appKey: 'OX9fm6vtrbUhDaMqhgePuzbV',
+        placeholder: '留个言再走吧~',
+        avatar:'mm',
+        meta:guest,
+        pageSize:'10' || 10,
+        visitor: false
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

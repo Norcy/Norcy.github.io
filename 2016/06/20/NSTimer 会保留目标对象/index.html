@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+      
+    
+    
+      
+    
+  <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+  <link href="//cdn.jsdelivr.net/npm/pace-js@1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.5.0',
+    sidebar: {"position":"right","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="别忘了NSTimer会保留其目标对象12345678910self.timer = [NSTimer scheduledTimerWithTimeInterval:3                                              target:self                                            selector:@select">
+<meta name="keywords" content="NSTimer;循环引用;self">
+<meta property="og:type" content="article">
+<meta property="og:title" content="别忘了NSTimer会保留其目标对象">
+<meta property="og:url" content="http://norcy.github.io/2016/06/20/NSTimer 会保留目标对象/index.html">
+<meta property="og:site_name" content="Norcy">
+<meta property="og:description" content="别忘了NSTimer会保留其目标对象12345678910self.timer = [NSTimer scheduledTimerWithTimeInterval:3                                              target:self                                            selector:@select">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2022-07-16T09:05:58.481Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="别忘了NSTimer会保留其目标对象">
+<meta name="twitter:description" content="别忘了NSTimer会保留其目标对象12345678910self.timer = [NSTimer scheduledTimerWithTimeInterval:3                                              target:self                                            selector:@select">
+
+
+
+
+
+
+  <link rel="canonical" href="http://norcy.github.io/2016/06/20/NSTimer 会保留目标对象/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>别忘了NSTimer会保留其目标对象 | Norcy</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?254282e11dbc3b9d82a87c07d3c21e0d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+
+    <a href="https://github.com/norcy" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Norcy</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">等下一个天亮...</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://norcy.github.io/2016/06/20/NSTimer 会保留目标对象/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Norcy">
+      <meta itemprop="description" content="iOS 修煉ing">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Norcy">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">别忘了NSTimer会保留其目标对象
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-06-20 00:00:00" itemprop="dateCreated datePublished" datetime="2016-06-20T00:00:00+00:00">2016-06-20</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2022-07-16 09:05:58" itemprop="dateModified" datetime="2022-07-16T09:05:58+00:00">2022-07-16</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/06/20/NSTimer 会保留目标对象/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2016/06/20/NSTimer 会保留目标对象/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="别忘了NSTimer会保留其目标对象"><a href="#别忘了NSTimer会保留其目标对象" class="headerlink" title="别忘了NSTimer会保留其目标对象"></a>别忘了NSTimer会保留其目标对象</h1><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">self</span>.timer = [<span class="built_in">NSTimer</span> scheduledTimerWithTimeInterval:<span class="number">3</span></span><br><span class="line">                                              target:<span class="keyword">self</span></span><br><span class="line">                                            selector:<span class="keyword">@selector</span>(f)</span><br><span class="line">                                            userInfo:<span class="literal">nil</span></span><br><span class="line">                                             repeats:<span class="literal">YES</span>];</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)dealloc</span><br><span class="line">&#123;</span><br><span class="line">    [<span class="keyword">self</span>.timer invalidate];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于 NSTimer 会引用住 self，而 self 又持有 NSTimer 对象，所以形成循环引用，dealloc 永远不会被执行，timer 也永远不会被释放，定时任务会一直执行下去</p>
+<h1 id="在-viewWillAppear-启动定时器，在-viewWillDisappear-停止定时器"><a href="#在-viewWillAppear-启动定时器，在-viewWillDisappear-停止定时器" class="headerlink" title="在 viewWillAppear 启动定时器，在 viewWillDisappear 停止定时器"></a>在 viewWillAppear 启动定时器，在 viewWillDisappear 停止定时器</h1><p>这种方法将 NSTimer 的停止时机提前到 viewWillDisappear，所以不会出现循环引用的问题，只是维护起来比较麻烦</p>
+<h1 id="为什么不直接使用-weakself"><a href="#为什么不直接使用-weakself" class="headerlink" title="为什么不直接使用 weakself"></a>为什么不直接使用 weakself</h1><p>我的第一直觉是像解决 Block 的循环引用一样，所以尝试 weakself 方案</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">__<span class="keyword">weak</span> <span class="keyword">typeof</span>(<span class="keyword">self</span>) weakSelf = <span class="keyword">self</span>;</span><br><span class="line"><span class="keyword">self</span>.timer = [<span class="built_in">NSTimer</span> scheduledTimerWithTimeInterval:<span class="number">3</span></span><br><span class="line">                                              target:weakSelf</span><br><span class="line">                                            selector:<span class="keyword">@selector</span>(f)</span><br><span class="line">                                            userInfo:<span class="literal">nil</span></span><br><span class="line">                                             repeats:<span class="literal">YES</span>];</span><br></pre></td></tr></table></figure>
+<p>实验发现这种方案是无法解决循环引用的问题，这个问题其实很经典，新手很容易混淆，以为用 weakSelf 就可以解决所有循环引用问题</p>
+<p>回顾下，Block 中只是对变量 weakSelf 拷贝了一份，是拷贝变量而不是拷贝对象。即 Block 中也新定义了一个 weakSelf 对象，内部实现代码类似这样<code>__weak blockWeakSelf = weakSelf;</code>，对象的 retainCount 没有变化。如果拷贝的是 self，那么 Block 内部实现代码类似这样<code>__strong blockStrongSelf = self;</code>，strong 类型的拷贝操作是会使对象的 retainCount 加1的</p>
+<p>回到 NSTimer</p>
+<blockquote>
+<p>  The timer maintains a strong reference to this object until it (the timer) is invalidated</p>
+</blockquote>
+<p>NSTimer 内部拿到 target 之后，就对其进行强引用，此时即使传入的是 weakSelf，但是 self 仍然会被引用住！因为是对对象本身进行引用，weakSelf 指向的跟 self 指向的都是同个对象，所以这里传 self 和 weakSelf 是没区别的。这也是为什么 block 里面用 strongSelf 强引用住 weakSelf，就可以让 self 不释放的原因</p>
+<h1 id="使用-Block-来解决循环引用"><a href="#使用-Block-来解决循环引用" class="headerlink" title="使用 Block 来解决循环引用"></a>使用 Block 来解决循环引用</h1><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//.h</span></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">NSTimer</span> (<span class="title">NCYTimer</span>)</span></span><br><span class="line">+ (<span class="built_in">NSTimer</span> *)ncy_scheduledTimerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)interval block:(<span class="keyword">void</span>(^)())block repeats:(<span class="built_in">BOOL</span>)repeats;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//.m</span></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">NSTimer</span> (<span class="title">NCYTimer</span>)</span></span><br><span class="line">+ (<span class="built_in">NSTimer</span> *)ncy_scheduledTimerWithTimeInterval:(<span class="built_in">NSTimeInterval</span>)interval</span><br><span class="line">                                          block:(<span class="keyword">void</span>(^)())block</span><br><span class="line">                                        repeats:(<span class="built_in">BOOL</span>)repeats</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> [<span class="keyword">self</span> scheduledTimerWithTimeInterval:interval</span><br><span class="line">                                         target:<span class="keyword">self</span></span><br><span class="line">                                       selector:<span class="keyword">@selector</span>(ncy_blockHandle:)</span><br><span class="line">                                       userInfo:[block <span class="keyword">copy</span>]    <span class="comment">//记得使用 copy</span></span><br><span class="line">                                        repeats:repeats];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">+ (<span class="keyword">void</span>)ncy_blockHandle:(<span class="built_in">NSTimer</span> *)timer</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">void</span> (^block)() = timer.userInfo;</span><br><span class="line">    <span class="keyword">if</span> (block)</span><br><span class="line">    &#123;</span><br><span class="line">        block();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>调用过程注意循环引用</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">__<span class="keyword">weak</span> <span class="keyword">typeof</span>(<span class="keyword">self</span>) weakSelf = <span class="keyword">self</span>;    <span class="comment">//避免 block 强引用 self</span></span><br><span class="line"><span class="keyword">self</span>.timer = [<span class="built_in">NSTimer</span> ncy_scheduledTimerWithTimeInterval:<span class="number">3</span></span><br><span class="line">                                                   block:^&#123;</span><br><span class="line">                                                       <span class="keyword">typeof</span>(weakSelf) strongSelf = weakSelf;</span><br><span class="line">                                                       [strongSelf f];</span><br><span class="line">                                                   &#125;</span><br><span class="line">                                                 repeats:<span class="literal">YES</span>];</span><br></pre></td></tr></table></figure>
+<ul>
+<li>这套方案将计时器应执行的任务封装成 block，然后再放到 userInfo 传给计时器，block 作为参数传递时要 copy 到堆上，否则等到真正执行的时候很可能会被释放</li>
+<li>这套方法依然存在循环引用的问题，但因为现在 NSTimer 引用的 target 是类对象，<strong>类对象本身是个单例</strong>，无需回收，而不是调用者，所以循环引用了也没关系</li>
+<li>调用的时候记得 block 里面要用 weakSelf，然后使用的时候再将 weakSelf 转为 strongSelf，防止 block 执行过程中，self 被释放</li>
+<li>疑问点：为什么类方法可以使用 self？<ol>
+<li>类方法可以调用类方法</li>
+<li>类方法不可以调用实例方法，但是类方法可以通过创建对象来访问实例方法</li>
+<li>类方法不可以使用实例变量，类方法可以使用self，因为self不是实例变量<ol>
+<li>实例方法里面的self，是对象的首地址</li>
+<li>类方法里面的self，是Class</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>疑问点：全部定时器执行的代码放到一个单例去做，不会冲突吗？定时器每执行一个任务就是新建一个线程吗</p>
+<p>  定时器每执行一个任务并没有新建一个线程，都是在当前线程，所以冲突是有可能的，假如某个任务很耗时，是会影响其他任务的执行的，更多线程问题可以参考<a href="http://www.jianshu.com/p/8121e4aadb4f" target="_blank" rel="noopener">NSTimer和实现弱引用的timer的方式</a></p>
+</li>
+</ul>
+<h1 id="使用-NSProxy-来解决循环引用"><a href="#使用-NSProxy-来解决循环引用" class="headerlink" title="使用 NSProxy 来解决循环引用"></a>使用 NSProxy 来解决循环引用</h1><p>引入一个对象 NSProxy，NSProxy 弱引用 self，然后 NSProxy 传入 NSTimer。即，self 强引用 NSTimer，NSTimer 强引用 NSProxy，NSProxy 弱引用 self，此时不会形成环。</p>
+<p>这个 NSProxy 可参考 <a href="https://github.com/ibireme/YYKit/blob/master/YYKit/Utility/YYWeakProxy.m" target="_blank" rel="noopener">YYWeakProxy</a> 的实现</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li>《Effective-Objective-C-读书笔记》之《第52条：别忘了NSTimer会保留其目标对象》</li>
+<li><a href="http://www.jianshu.com/p/8121e4aadb4f" target="_blank" rel="noopener">NSTimer和实现弱引用的timer的方式</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>一杯冰可乐</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Norcy 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Norcy 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/15/ARC MRC 调用未声明方法/" rel="next" title="ARC/MRC 调用未声明方法">
+                <i class="fa fa-chevron-left"></i> ARC/MRC 调用未声明方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/25/神在细节之中/" rel="prev" title="神在细节之中">
+                神在细节之中 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Norcy</p>
+              <p class="site-description motion-element" itemprop="description">iOS 修煉ing</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#别忘了NSTimer会保留其目标对象"><span class="nav-number">1.</span> <span class="nav-text">别忘了NSTimer会保留其目标对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#在-viewWillAppear-启动定时器，在-viewWillDisappear-停止定时器"><span class="nav-number">2.</span> <span class="nav-text">在 viewWillAppear 启动定时器，在 viewWillDisappear 停止定时器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么不直接使用-weakself"><span class="nav-number">3.</span> <span class="nav-text">为什么不直接使用 weakself</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用-Block-来解决循环引用"><span class="nav-number">4.</span> <span class="nav-text">使用 Block 来解决循环引用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用-NSProxy-来解决循环引用"><span class="nav-number">5.</span> <span class="nav-text">使用 NSProxy 来解决循环引用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Norcy</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.5.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+    
+      
+  
+  <script type="text/javascript" color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.5.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'HXXclkVSXXj49dV3NfLuq2cW-gzGzoHsz',
+        appKey: 'OX9fm6vtrbUhDaMqhgePuzbV',
+        placeholder: '留个言再走吧~',
+        avatar:'mm',
+        meta:guest,
+        pageSize:'10' || 10,
+        visitor: false
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>

@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+      
+    
+    
+      
+    
+  <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+  <link href="//cdn.jsdelivr.net/npm/pace-js@1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.5.0',
+    sidebar: {"position":"right","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="背景有一次，发现调用一个未声明的方法的时候，Xcode 居然没有像往常一样给出错误提示，而只是给了 Warning，研究后发现原来该文件不是 ARC，所以出现这种问题，那么 ARC 和 MRC 之间，对于调用未声明的方法，有什么区别呢？ 实验[self noSuchMethod]; MRC 下，调用一个未声明的方法，编译器会给出 Warning:  “Instance method ‘noSuch">
+<meta name="keywords" content="ARC,MRC,未声明方法,performSelector,undeclared methods">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ARC&#x2F;MRC 调用未声明方法">
+<meta property="og:url" content="http://norcy.github.io/2016/06/15/ARC MRC 调用未声明方法/index.html">
+<meta property="og:site_name" content="Norcy">
+<meta property="og:description" content="背景有一次，发现调用一个未声明的方法的时候，Xcode 居然没有像往常一样给出错误提示，而只是给了 Warning，研究后发现原来该文件不是 ARC，所以出现这种问题，那么 ARC 和 MRC 之间，对于调用未声明的方法，有什么区别呢？ 实验[self noSuchMethod]; MRC 下，调用一个未声明的方法，编译器会给出 Warning:  “Instance method ‘noSuch">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2022-07-16T09:05:58.481Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ARC&#x2F;MRC 调用未声明方法">
+<meta name="twitter:description" content="背景有一次，发现调用一个未声明的方法的时候，Xcode 居然没有像往常一样给出错误提示，而只是给了 Warning，研究后发现原来该文件不是 ARC，所以出现这种问题，那么 ARC 和 MRC 之间，对于调用未声明的方法，有什么区别呢？ 实验[self noSuchMethod]; MRC 下，调用一个未声明的方法，编译器会给出 Warning:  “Instance method ‘noSuch">
+
+
+
+
+
+
+  <link rel="canonical" href="http://norcy.github.io/2016/06/15/ARC MRC 调用未声明方法/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>ARC/MRC 调用未声明方法 | Norcy</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?254282e11dbc3b9d82a87c07d3c21e0d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+
+    <a href="https://github.com/norcy" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Norcy</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">等下一个天亮...</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://norcy.github.io/2016/06/15/ARC MRC 调用未声明方法/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Norcy">
+      <meta itemprop="description" content="iOS 修煉ing">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Norcy">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ARC/MRC 调用未声明方法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-06-15 00:00:00" itemprop="dateCreated datePublished" datetime="2016-06-15T00:00:00+00:00">2016-06-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2022-07-16 09:05:58" itemprop="dateModified" datetime="2022-07-16T09:05:58+00:00">2022-07-16</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/06/15/ARC MRC 调用未声明方法/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">评论数：</span> <span class="post-comments-count valine-comment-count" data-xid="/2016/06/15/ARC MRC 调用未声明方法/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>有一次，发现调用一个未声明的方法的时候，Xcode 居然没有像往常一样给出错误提示，而只是给了 Warning，研究后发现原来该文件不是 ARC，所以出现这种问题，那么 ARC 和 MRC 之间，对于调用未声明的方法，有什么区别呢？</p>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p><code>[self noSuchMethod];</code></p>
+<p>MRC 下，调用一个未声明的方法，编译器会给出 Warning:</p>
+<blockquote>
+<p>“Instance method ‘noSuchMethod’ not found (return type defaults to ‘id’)”</p>
+</blockquote>
+<p>ARC 下，调用一个未声明的方法，编译器却给出 Error:</p>
+<blockquote>
+<p>“No visible @interface for ‘xxx’ declares the selector ‘noSuchMethod’”</p>
+</blockquote>
+<p>原因：</p>
+<p>ARC 下，编译器需要知道方法返回值的所有者，才能正确在合适的地方添加 retain/release 等，所以显式调用一个未声明的方法在 ARC 下默认是不允许的</p>
+<p>下面是具体的代码提示，跟Xcode的版本有关系，我的Xcode是<code>Version 7.3.1 (7D1014)</code></p>
+<p>MRC:</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">id</span> classA;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Warning:Instance method '-xyz' not found (return type defaults to 'id')</span></span><br><span class="line">[classA xyz];</span><br><span class="line"></span><br><span class="line"><span class="comment">// Warning:Undeclared selector 'xyz'</span></span><br><span class="line">[classA performSelector:<span class="keyword">@selector</span>(xyz)];</span><br><span class="line"></span><br><span class="line"><span class="comment">// No Error, No Warning</span></span><br><span class="line">[classA performSelector:<span class="built_in">NSSelectorFromString</span>(<span class="string">@"xyz"</span>)];</span><br><span class="line"></span><br><span class="line"><span class="comment">// Warning:Undeclared selector 'xyz'</span></span><br><span class="line">[classA performSelector:<span class="keyword">@selector</span>(xyz) withObject:<span class="literal">nil</span>];</span><br><span class="line">    </span><br><span class="line"><span class="comment">// No Error, No Warning</span></span><br><span class="line">[classA performSelector:<span class="built_in">NSSelectorFromString</span>(<span class="string">@"xyz"</span>) withObject:<span class="literal">nil</span>];</span><br><span class="line">    </span><br><span class="line"><span class="comment">// Warning:Undeclared selector 'xyz'</span></span><br><span class="line">[classA performSelector:<span class="keyword">@selector</span>(xyz) withObject:<span class="literal">nil</span> afterDelay:<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// No Error, No Warning</span></span><br><span class="line">[classA performSelector:<span class="built_in">NSSelectorFromString</span>(<span class="string">@"xyz"</span>) withObject:<span class="literal">nil</span> afterDelay:<span class="number">0</span>];</span><br></pre></td></tr></table></figure>
+<p>ARC:</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">id</span> classA;</span><br><span class="line">    </span><br><span class="line"><span class="comment">// Error:No known instance method for selector 'xyz' 或者</span></span><br><span class="line"><span class="comment">// Error:No visible @interface for 'xxx' declares the selector 'xyz'</span></span><br><span class="line">[classA xyz];</span><br><span class="line">    </span><br><span class="line"><span class="comment">// Warning:Undeclared selector 'xyz'</span></span><br><span class="line">[classA performSelector:<span class="keyword">@selector</span>(xyz)];</span><br><span class="line">    </span><br><span class="line"><span class="comment">// Warning:"PerformSelector may cause a leak because its selector is unknown"</span></span><br><span class="line">[classA performSelector:<span class="built_in">NSSelectorFromString</span>(<span class="string">@"xyz"</span>)];</span><br><span class="line">    </span><br><span class="line"><span class="comment">// Warning:Undeclared selector 'xyz'</span></span><br><span class="line">[classA performSelector:<span class="keyword">@selector</span>(xyz) withObject:<span class="literal">nil</span>];</span><br><span class="line">    </span><br><span class="line"><span class="comment">// Warning:"PerformSelector may cause a leak because its selector is unknown"</span></span><br><span class="line">[classA performSelector:<span class="built_in">NSSelectorFromString</span>(<span class="string">@"xyz"</span>) withObject:<span class="literal">nil</span>];</span><br><span class="line">    </span><br><span class="line"><span class="comment">// Warning:Undeclared selector 'xyz'</span></span><br><span class="line">[classA performSelector:<span class="keyword">@selector</span>(xyz) withObject:<span class="literal">nil</span> afterDelay:<span class="number">0</span>];</span><br><span class="line">    </span><br><span class="line"><span class="comment">// No Error, No Warning</span></span><br><span class="line">[classA performSelector:<span class="built_in">NSSelectorFromString</span>(<span class="string">@"xyz"</span>) withObject:<span class="literal">nil</span> afterDelay:<span class="number">0</span>];</span><br></pre></td></tr></table></figure>
+<p>问题：</p>
+<ol>
+<li><p>@selector 和 NSSelectorFromString 区别</p>
+<p> 可以看到使用 @selector()，编译器可以知道相应方法没有被声明；而使用 NSSelectorFromString，编译器并不知情，因为该方法是动态的，在 Runtime 的时候才能确定相应的方法实现，所以编译器选择了忽略</p>
+<p> 所以 MRC 下很简单，@selector 就给警告， NSSelectorFromString 就不管</p>
+<p> ARC 下，就复杂点，@selectot 依然给警告，但是 NSSelectorFromString 的处理就复杂点，继续往下看</p>
+</li>
+<li><p>那为什么 ARC 下， <code>performSelector:NSSelectorFromString()</code> 会有 Leak Warning</p>
+<p> 事实上，无论 xyz 方法存在不存在，只要是 ARC 下，使用<code>performSelector:NSSelectorFromString()</code>就会有该 Warning 产生，因为编译器并不知道你调用了什么方法(是含有<code>alloc</code>/<code>new</code>/<code>copy</code>/<code>mutableCopy</code>关键字的方法还是普通方法)，那它也不知道该不该添加 retain/release 等，所以给出可能产生内存泄露的警告</p>
+<p> 如果确定了这样调用没有内存问题，那么可以通过以下方法消除 Warning：</p>
+<ul>
+<li><p>针对部分代码</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#pragma clang diagnostic push</span></span><br><span class="line"><span class="meta">#pragma clang diagnostic ignored <span class="meta-string">"-Warc-performSelector-leaks"</span></span></span><br><span class="line">[classA performSelector:<span class="built_in">NSSelectorFromString</span>(<span class="string">@"xyz"</span>)];</span><br><span class="line"><span class="meta">#pragma clang diagnostic pop</span></span><br></pre></td></tr></table></figure>
+<p>更骚一点的做法是</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#define SILENCE_PERFORMSELECTOR(expr)                               \</span></span><br><span class="line"><span class="keyword">do</span> &#123;                                                                \</span><br><span class="line">_Pragma(<span class="string">"clang diagnostic push"</span>)                                    \</span><br><span class="line">_Pragma(<span class="string">"clang diagnostic ignored \"-Warc-performSelector-leaks\""</span>) \</span><br><span class="line">expr;                                                               \</span><br><span class="line">_Pragma(<span class="string">"clang diagnostic pop"</span>)                                     \</span><br><span class="line">&#125; <span class="keyword">while</span>(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">SILENCE_PERFORMSELECTOR([classA performSelector:<span class="built_in">NSSelectorFromString</span>(<span class="string">@"xyz"</span>)]);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>针对单个文件，与设置某个文件为非 ARC 类似（见小Tips），添加<code>-Wno-arc-performSelector-leaks</code></p>
+</li>
+<li>针对整个工程，Build Settings，搜索 Other Warning Flags，添加<code>-Wno-arc-performSelector-leaks</code></li>
+</ul>
+</li>
+<li><p>最后的问题，为什么 ARC 下， <code>performSelector:NSSelectorFromString() withObject:afterDelay:</code> 就没有 Leak Warning 呢</p>
+<p> 看看这几个函数的原型</p>
+ <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">id</span>)performSelector:(SEL)aSelector;</span><br><span class="line">- (<span class="keyword">id</span>)performSelector:(SEL)aSelector withObject:(<span class="keyword">id</span>)object;</span><br><span class="line">- (<span class="keyword">void</span>)performSelector:(SEL)aSelector withObject:(<span class="keyword">nullable</span> <span class="keyword">id</span>)anArgument afterDelay:(<span class="built_in">NSTimeInterval</span>)delay;</span><br></pre></td></tr></table></figure>
+<p> 可以看到，<code>performSelector:withObject:afterDelay:</code>返回值是 void。所以可以推测，Xcode 认为，你既然写了 afterDelay（即使是延迟0秒），那么它的返回值是 void，无论 selector 有没有返回值，都不需要为之添加 retain/release，所以这种情况下没有内存问题</p>
+</li>
+</ol>
+<h1 id="小Tips"><a href="#小Tips" class="headerlink" title="小Tips"></a>小Tips</h1><ol>
+<li>ARC 与 MRC 互转：工程 -&gt; Targets -&gt; Build Phases -&gt; Compile Sources -&gt; 对应的.m文件的Compiler Flags添加<code>-fno-objc-arc</code>(MRC)/<code>-fobjc-arc</code>(ARC)</li>
+<li>判断 ARC 与 MRC 的快速方法，在 <code>dealloc</code> 里面调用 <code>[super dealloc];</code>，如果报错则是 ARC，否则是 MRC</li>
+</ol>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<li><a href="http://stackoverflow.com/questions/7017281/performselector-may-cause-a-leak-because-its-selector-is-unknown/7954697#7954697" target="_blank" rel="noopener">stackoverflow1</a></li>
+<li><a href="http://stackoverflow.com/questions/20582642/why-arc-forbids-calls-to-undeclared-methods/20582863#20582863" target="_blank" rel="noopener">stackoverflow2</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+       
+    
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>一杯冰可乐</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Norcy 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Norcy 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/12/NSUserdefaults与NSMutableArray的坑/" rel="next" title="NSUserdefaults与NSMutableArray的坑">
+                <i class="fa fa-chevron-left"></i> NSUserdefaults与NSMutableArray的坑
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/20/NSTimer 会保留目标对象/" rel="prev" title="别忘了NSTimer会保留其目标对象">
+                别忘了NSTimer会保留其目标对象 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Norcy</p>
+              <p class="site-description motion-element" itemprop="description">iOS 修煉ing</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验"><span class="nav-number">2.</span> <span class="nav-text">实验</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#小Tips"><span class="nav-number">3.</span> <span class="nav-text">小Tips</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考链接"><span class="nav-number">4.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Norcy</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v6.5.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+    
+      
+  
+  <script type="text/javascript" color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.5.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'HXXclkVSXXj49dV3NfLuq2cW-gzGzoHsz',
+        appKey: 'OX9fm6vtrbUhDaMqhgePuzbV',
+        placeholder: '留个言再走吧~',
+        avatar:'mm',
+        meta:guest,
+        pageSize:'10' || 10,
+        visitor: false
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
